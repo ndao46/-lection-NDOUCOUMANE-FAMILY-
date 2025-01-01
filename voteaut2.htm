@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulaire de Vote</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+    }
+    .form-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .result-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .progress-bar {
+      background-color: #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .progress-bar div {
+      height: 20px;
+      line-height: 20px;
+      color: #fff;
+      text-align: center;
+    }
+    .aziz-ndeye-khady { background-color: #4caf50; }
+    .aziz-mariama { background-color: #2196f3; }
+  </style>
+</head>
+<body>
+  <h1>Vote pour les candidats</h1>
+  <div class="form-container">
+    <form id="voteForm">
+      <label>
+        <input type="radio" name="candidate" value="Aziz et Ndeye Khady" required> Aziz et Ndeye Khady
+      </label><br>
+      <label>
+        <input type="radio" name="candidate" value="Aziz et Mariama" required> Aziz et Mariama
+      </label><br><br>
+      <button type="submit">Voter</button>
+    </form>
+  </div>
+  <div class="result-container">
+    <h2>Résultats</h2>
+    <div>Aziz et Ndeye Khady : <span id="azizNdeyeKhadyCount">0</span> votes (<span id="azizNdeyeKhadyPercent">0</span>%)</div>
+    <div class="progress-bar"><div id="azizNdeyeKhadyBar" class="aziz-ndeye-khady" style="width: 0%;"></div></div>
+    <div>Aziz et Mariama : <span id="azizMariamaCount">0</span> votes (<span id="azizMariamaPercent">0</span>%)</div>
+    <div class="progress-bar"><div id="azizMariamaBar" class="aziz-mariama" style="width: 0%;"></div></div>
+  </div>
+
+  <script>
+    // Variables pour les votes
+    const totalVotes = 15;
+    let votesAzizNdeyeKhady = 0;
+    let votesAzizMariama = 0;
+
+    // Fonction pour mettre à jour les résultats
+    function updateResults() {
+      const totalCurrentVotes = votesAzizNdeyeKhady + votesAzizMariama;
+      const percentAzizNdeyeKhady = ((votesAzizNdeyeKhady / totalVotes) * 100).toFixed(1);
+      const percentAzizMariama = ((votesAzizMariama / totalVotes) * 100).toFixed(1);
+
+      // Mise à jour des éléments HTML
+      document.getElementById("azizNdeyeKhadyCount").textContent = votesAzizNdeyeKhady;
+      document.getElementById("azizNdeyeKhadyPercent").textContent = totalCurrentVotes > 0 ? percentAzizNdeyeKhady : 0;
+      document.getElementById("azizNdeyeKhadyBar").style.width = `${percentAzizNdeyeKhady}%`;
+
+      document.getElementById("azizMariamaCount").textContent = votesAzizMariama;
+      document.getElementById("azizMariamaPercent").textContent = totalCurrentVotes > 0 ? percentAzizMariama : 0;
+      document.getElementById("azizMariamaBar").style.width = `${percentAzizMariama}%`;
+    }
+
+    // Gestionnaire de soumission de formulaire
+    document.getElementById("voteForm").addEventListener("submit", (event) => {
+      event.preventDefault(); // Empêche le rechargement de la page
+
+      // Récupère le candidat sélectionné
+      const selectedCandidate = document.querySelector('input[name="candidate"]:checked').value;
+
+      // Incrémente les votes pour le candidat sélectionné
+      if (votesAzizNdeyeKhady + votesAzizMariama < totalVotes) {
+        if (selectedCandidate === "Aziz et Ndeye Khady") {
+          votesAzizNdeyeKhady++;
+        } else if (selectedCandidate === "Aziz et Mariama") {
+          votesAzizMariama++;
+        }
+        updateResults(); // Met à jour les résultats
+      } else {
+        alert("Le nombre maximum de votes (15) est atteint !");
+      }
+    });
+  </script>
+</body>
+</html>
